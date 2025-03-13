@@ -1,12 +1,18 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-      stage('Build Artifact') {
+    tools {
+        jdk 'JDK17' // Matches the name from Global Tool Configuration
+        maven 'Maven3' // Your Maven installation name
+    }
+
+    stages {
+        stage('Build') {
             steps {
-              sh "mvn clean package -DskipTests=true -Dmaven.compiler.release=17 -Djdk.module.illegalAccess=permit"
-              archive 'target/*.jar' //so that they can be downloaded later
+                withEnv(["MAVEN_OPTS=--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED"]) {
+                    sh 'mvn clean package -DskipTests=true -Dmaven.compiler.release=17'
+                }
             }
-        }   
+        }
     }
 }
