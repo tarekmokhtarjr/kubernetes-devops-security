@@ -13,7 +13,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <spring.boot.version>3.1.5</spring.boot.version>  <!-- Updated for Java 17 compatibility -->
+        <spring.boot.version>3.1.5</spring.boot.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
@@ -51,11 +51,11 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Google Guice -->
+        <!-- Google Guice (correct version) -->
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>5.1.1</version>
+            <version>5.1.0</version>
         </dependency>
     </dependencies>
 
@@ -67,9 +67,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
                 <configuration>
-                    <release>17</release>  <!-- Simplified using release property -->
+                    <release>17</release>
                     <compilerArgs>
-                        <!-- Add module access flags -->
                         <arg>--add-opens</arg>
                         <arg>java.base/java.lang=ALL-UNNAMED</arg>
                         <arg>--add-opens</arg>
@@ -97,7 +96,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>  <!-- Explicit version -->
+                <version>${spring.boot.version}</version>
             </plugin>
         </plugins>
     </build>
