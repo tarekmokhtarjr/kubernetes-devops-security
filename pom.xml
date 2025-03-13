@@ -68,6 +68,11 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
+                    <!-- Optional: Add these only if needed -->
+                    <compilerArgs>
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
