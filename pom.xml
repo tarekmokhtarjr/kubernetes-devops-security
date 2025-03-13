@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -12,7 +13,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <spring.boot.version>2.7.14</spring.boot.version>
+        <spring.boot.version>3.1.5</spring.boot.version>  <!-- Updated for Java 17 compatibility -->
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
@@ -50,11 +51,11 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Google Guice for Java 17 -->
+        <!-- Google Guice -->
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>5.1.1</version> <!-- Updated version -->
+            <version>5.1.1</version>
         </dependency>
     </dependencies>
 
@@ -64,27 +65,25 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>  <!-- Upgraded from 3.8.1 -->
+                <version>3.10.1</version>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <release>17</release>  <!-- Simplified using release property -->
                     <compilerArgs>
-                        <!-- Add --add-opens JVM arguments for compile-time issues -->
-                        --add-opens java.base/java.lang=ALL-UNNAMED
-                        --add-opens java.base/java.lang.reflect=ALL-UNNAMED
-                        --add-opens java.base/java.util=ALL-UNNAMED
-                        --add-opens java.base/java.io=ALL-UNNAMED
+                        <!-- Add module access flags -->
+                        <arg>--add-opens</arg>
+                        <arg>java.base/java.lang=ALL-UNNAMED</arg>
+                        <arg>--add-opens</arg>
+                        <arg>java.base/java.lang.reflect=ALL-UNNAMED</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
 
-            <!-- Maven Surefire Plugin for test execution -->
+            <!-- Maven Surefire Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
-                    <!-- Add --add-opens JVM arguments for test execution -->
                     <argLine>
                         --add-opens java.base/java.lang=ALL-UNNAMED
                         --add-opens java.base/java.lang.reflect=ALL-UNNAMED
@@ -98,9 +97,8 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>  <!-- Explicit version -->
             </plugin>
-
         </plugins>
     </build>
-
 </project>
