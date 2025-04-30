@@ -1,10 +1,11 @@
 #!/bin/bash
 
 echo ".........----------------#################._.-.-Caution-.-._.#################----------------........."
+echo "It's recommended to run this script as a root user or a super user and with sudo"
 echo "If you are running this script on a virtualbox vm and you want to set a maunal ip address then follow the steps:"
 echo "    - First set the network adapter to bridged"
 echo "    - Use the template in network-config-template"
-echo "    - sudo netplan apply"
+echo "    - run -> sudo netplan apply"
 echo "#######################################################################################################"
 
 
