@@ -46,6 +46,7 @@ kubeadm reset -f
 
 # uncomment below line if your host doesnt have minimum requirement of 2 CPU
 # kubeadm init --kubernetes-version=${KUBE_VERSION} --ignore-preflight-errors=NumCPU --skip-token-print
+kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers --v=9
 kubeadm init --skip-token-print
 
 mkdir -p ~/.kube
