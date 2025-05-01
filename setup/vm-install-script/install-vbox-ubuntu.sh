@@ -112,7 +112,7 @@ mvn -v
 echo ".........----------------#################._.-.-JENKINS-.-._.#################----------------........."
 curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee /etc/apt/keyrings/jenkins-keyring.asc > /dev/null
 echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev$
-wget http://archive.ubuntu.com/ubuntu/pool/main/i/init-system-helpers/init-system-helpers_1.56+nmu1~ubuntu18.04.1_all.deb
+curl -O http://archive.ubuntu.com/ubuntu/pool/main/i/init-system-helpers/init-system-helpers_1.56+nmu1~ubuntu18.04.1_all.deb
 sudo dpkg -i init-system-helpers_1.56+nmu1~ubuntu18.04.1_all.deb
 sudo apt update
 sudo apt install -y jenkins
