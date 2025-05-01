@@ -42,27 +42,64 @@ systemctl enable kubelet
 systemctl start kubelet
 
 echo ".........----------------#################._.-.-KUBERNETES-.-._.#################----------------........."
-rm /root/.kube/config
-kubeadm reset -f
+set -e
 
-# uncomment below line if your host doesnt have minimum requirement of 2 CPU
-# kubeadm init --kubernetes-version=${KUBE_VERSION} --ignore-preflight-errors=NumCPU --skip-token-print
+echo "[Step 1] Disable swap"
+sudo swapoff -a
+sudo sed -i '/ swap / s/^/#/' /etc/fstab
+
+echo "[Step 2] Load kernel modules"
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+br_netfilter
+EOF
+
+sudo modprobe br_netfilter
+
+echo "[Step 3] Set sysctl params"
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+
+sudo sysctl --system
+
+echo "[Step 4] Install containerd"
+sudo apt-get update && sudo apt-get install -y containerd
+sudo mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+sudo systemctl restart containerd
+sudo systemctl enable containerd
+
+echo "[Step 5] Add Kubernetes repo"
+sudo apt-get update
+sudo apt-get install -y apt-transport-https curl gnupg
+sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/kubernetes.gpg
+echo "deb https://pkgs.k8s.io/core:/stable:/v1.32/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+echo "[Step 6] Install kubelet, kubeadm, kubectl"
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+echo "[Step 7] Initialize Kubernetes cluster with Weave Net CIDR"
 kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers --v=9
-kubeadm init --skip-token-print
+sudo kubeadm init --apiserver-advertise-address=192.168.0.88 --pod-network-cidr=10.32.0.0/12 # 192.168.0.88 is your vm ip, change it with your vm ip
 
-mkdir -p ~/.kube
-sudo cp -i /etc/kubernetes/admin.conf ~/.kube/config
+echo "[Step 8] Configure kubectl for current user"
+mkdir -p $HOME/.kube
+sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
+echo "[Step 9] Install Weave Net CNI"
 kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
-
 sleep 60
 
-echo "untaint controlplane node"
-kubectl taint node $(kubectl get nodes -o=jsonpath='{.items[].metadata.name}') node.kubernetes.io/not-ready:NoSchedule-
-kubectl taint node $(kubectl get nodes -o=jsonpath='{.items[].metadata.name}') node-role.kubernetes.io/master:NoSchedule-
-kubectl get node -o wide
+echo "[Step 10] Allow scheduling pods on the control-plane node"
+kubectl taint nodes --all node-role.kubernetes.io/control-plane- || true
 
-
+echo "Check Kubernetes is installed and ready."
+kubectl get nodes
 
 echo ".........----------------#################._.-.-Java and MAVEN-.-._.#################----------------........."
 sudo apt install openjdk-17-jdk -y
