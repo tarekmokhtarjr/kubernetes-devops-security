@@ -32,6 +32,7 @@ echo "[Step 2] Install K3S"
 curl -sfL https://get.k3s.io | sh -
 
 echo "Check Kubernetes is installed and ready."
+sleep 60
 kubectl get nodes
 
 echo ".........----------------#################._.-.-Java and MAVEN-.-._.#################----------------........."
