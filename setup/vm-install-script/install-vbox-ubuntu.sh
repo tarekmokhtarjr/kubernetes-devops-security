@@ -51,12 +51,6 @@ sudo swapoff -a
 sudo sed -i '/ swap / s/^/#/' /etc/fstab
 echo "[Step 2] Install K3S"
 curl -sfL https://get.k3s.io | sh -
-echo "██████╗  ██████╗ ███╗   ██╗███████╗██╗";
-echo "██╔══██╗██╔═══██╗████╗  ██║██╔════╝██║";
-echo "██║  ██║██║   ██║██╔██╗ ██║█████╗  ██║";
-echo "██║  ██║██║   ██║██║╚██╗██║██╔══╝  ╚═╝";
-echo "██████╔╝╚██████╔╝██║ ╚████║███████╗██╗";
-echo "╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝";
 echo "Check Kubernetes is installed and ready."
 sleep 60
 kubectl get nodes
@@ -89,6 +83,7 @@ sudo apt install -y jenkins
 systemctl daemon-reload
 systemctl enable jenkins
 sudo systemctl start jenkins
+sudo usermod -a -G docker jenkins
 sudo systemctl status jenkins
 echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "██████╗  ██████╗ ███╗   ██╗███████╗██╗";
