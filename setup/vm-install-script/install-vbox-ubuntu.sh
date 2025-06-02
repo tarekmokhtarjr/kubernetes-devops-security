@@ -14,7 +14,6 @@ echo "    - Use the template in network-config-template"
 echo "    - run -> sudo netplan apply"
 echo -e "#######################################################################################################"
 
-
 echo "██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗      █████╗ ████████╗██╗ ██████╗ ███╗   ██╗";
 echo "██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔══██╗╚══██╔══╝██║██╔═══██╗████╗  ██║";
 echo "██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     ███████║   ██║   ██║██║   ██║██╔██╗ ██║";
@@ -66,8 +65,6 @@ java -version
 sudo apt install -y maven
 mvn -v
 
-
-
 echo "     ██╗███████╗███╗   ██╗██╗  ██╗██╗███╗   ██╗███████╗";
 echo "     ██║██╔════╝████╗  ██║██║ ██╔╝██║████╗  ██║██╔════╝";
 echo "     ██║█████╗  ██╔██╗ ██║█████╔╝ ██║██╔██╗ ██║███████╗";
@@ -84,11 +81,13 @@ systemctl daemon-reload
 systemctl enable jenkins
 sudo systemctl start jenkins
 sudo usermod -a -G docker jenkins
-sudo systemctl status jenkins
 echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 echo "██████╗  ██████╗ ███╗   ██╗███████╗██╗";
 echo "██╔══██╗██╔═══██╗████╗  ██║██╔════╝██║";
 echo "██║  ██║██║   ██║██╔██╗ ██║█████╗  ██║";
 echo "██║  ██║██║   ██║██║╚██╗██║██╔══╝  ╚═╝";
 echo "██████╔╝╚██████╔╝██║ ╚████║███████╗██╗";
 echo "╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝";
+echo "Test jenkins using: "
+echo "sudo systemctl status jenkins"
